@@ -1,0 +1,13 @@
+[package]
+name = "maple-wz-dubegger"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.43", features = ["fs", "rt", "rt-multi-thread", "macros", "io-std", "io-util"] }
+tokio-macros = "2.5.0"
+futures = { version = "0.3.30" }
+wz_reader = { version = "0.0.14", features = ["json"] }
+thiserror = "1.0"
