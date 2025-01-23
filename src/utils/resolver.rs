@@ -66,6 +66,7 @@ pub fn resolve_root_wz_file_dir<'a>(
 
                 if file_type.is_dir() && target_node.is_some() {
                     if let Some(file_path) = get_root_wz_file_path(&entry).await {
+                        append_to_log(&format!("try load wz folder: {}\n", file_path)).await?;
                         let dir_node = resolve_root_wz_file_dir(
                             file_path,
                             version,
@@ -207,11 +208,16 @@ pub async fn load_wz_by_base(
     }
 
     while let Some(result) = set.join_next().await {
+        if result.is_err() {
+            append_to_log(&format!("error: {}\n", result.unwrap_err())).await?;
+            continue;
+        }
         let node = result.unwrap()?;
         let name = {
             let node_read = node.read().unwrap();
             node_read.name.clone()
         };
+        append_to_log(&format!("category: {} loaded\n", name)).await?;
         base_node.write().unwrap().children.insert(name, node);
     }
 
@@ -301,6 +307,7 @@ pub async fn resolve_base(path: &str, version: Option<WzMapleVersion>) -> Result
         Some(path),
     )
     .await?;
+    append_to_log(&"other wz loaded\n").await?;
 
     resolve_pack_ms(path, &base_node).await?;
 

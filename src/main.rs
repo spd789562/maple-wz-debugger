@@ -26,6 +26,7 @@ async fn main() {
     let base_node = resolve_base(base_wz_str, None).await;
 
     if base_node.is_err() {
+        append_to_log("讀取失敗\n").await.unwrap();
         append_to_log(base_node.unwrap_err().to_string().as_str())
             .await
             .unwrap();
